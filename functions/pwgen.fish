@@ -13,7 +13,45 @@ function pwgen
 
     if set -lq _flag_version
         echo "pwgen, version 0.1"
-        return
+        return 0
+    end
+
+    if test -n "$_flag_h"
+        echo 'fish-pwgen v0.0.1 (https://github.com/holly/fish-pwgen/)
+
+Description:
+
+  fish password generation function emurate to pwgen command (https://sourceforge.net/projects/pwgen/)
+
+Usage:
+
+  pwgen [option] [length] [number]
+
+Options:
+
+ -A        exclude uppercase alphabets
+ -0        exclude numbers
+ -y        include symbols
+ -B        exclude similar words (1,I,l,q,9,0,O)
+ 
+Example:
+
+  # default. length:12 number:1.  password composed of alphabets and numbers
+  > pwgen
+    UgvYg2whVWTd
+
+  # length:16 number:20 with symbols
+  > pwgen -y 16 20
+    jUPow8_j{ZX{1Mv$ LWkCN9Oos}!AYoV{ 0Pa^W3S!a7>J5WSF AjPp{M9+v;4wXkn6 
+    xW_NgR;i9jtH9V;I !PDzUe3arp.;O1P1 hU;#95kSunFG@;wB 1EzT<_}e^#CXI@XR
+    B6gPou7#{HBmLI;X WhrBPk%O;hBV%T+6 jm._dWhc4hokan91 r1j8Vd4;!o4YsvIX
+    CXbao/*^ZzuzWF92 ;GmwM#m<5O<iw7Pa S3TjW7Un0M*CXD_B $t9pk5l#r$yK1m69
+    0%yW290gHk3_X.XV SREP#uPc81B<J.}% 1U9$+Y_y3>Ltr.%$ 9cZMh>ct7}Z@1jl9
+
+
+Copyright (C) 2023, holly.
+'
+        return 0
     end
 
     if test -n "$_flag_A"
@@ -39,15 +77,15 @@ function pwgen
     if test -n "$argv[1]"
         set pwgen_length $argv[1]
     end
-    set -l pwgen_count $_pwgen_count
+    set -l pwgen_number $_pwgen_number
     if test -n "$argv[2]"
-        set pwgen_count $argv[2]
+        set pwgen_number $argv[2]
     end
 
     set -l pws
     while true
 
-        if test (count $pws) -eq $pwgen_count
+        if test (count $pws) -eq $pwgen_number
             break
         end
         set -l pw ""

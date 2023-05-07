@@ -1,5 +1,5 @@
 set -g _pwgen_length            12
-set -g _pwgen_count              1
+set -g _pwgen_number             1
 set -g _pwgen_fold_char_length  82
 set -g _pwgen_duplication_count  2
 set -g _pwgen_lower_alphabets   "abcdefghijklmnoprstuvwxyz"
