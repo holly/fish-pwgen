@@ -1,2 +1,3 @@
 # fish-pwgen
-fish password generation function emurate to https://sourceforge.net/projects/pwgen/
+
+fish password generation function emurate to pwgen command (https://sourceforge.net/projects/pwgen/)
