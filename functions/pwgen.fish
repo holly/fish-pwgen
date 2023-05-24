@@ -1,7 +1,7 @@
 
 function __pwgen_help
 
-    echo 'fish-pwgen v0.0.1 (https://github.com/holly/fish-pwgen/)
+    echo "fish-pwgen $__pwgen_version (https://github.com/holly/fish-pwgen/)
 
 Description:
 
@@ -32,13 +32,11 @@ Example:
 
   # length:16 number:4 with symbols
   > pwgen -y 16 4
-    jUPow8_j{ZX{1Mv$    LWkCN9Oos}!AYoV{    0Pa^W3S!a7>J5WSF    AjPp{M9+v;4wXkn6 
+    jUPow8_j{ZX{1Mv.    LWkCN9Oos}!AYoV{    0Pa^W3S!a7>J5WSF    AjPp{M9+v;4wXkn6 
 
 Copyright (C) 2023, holly.
-'
+"
 end
-
-
 
 function pwgen
 
@@ -109,8 +107,7 @@ function pwgen
 
         set -a passwords $password
     end
-    #printf "%s\n" $passwords | column -x | string replace -a "\t" " "
-    printf "%s\n" $passwords 
+    printf "%s\n" $passwords | column -x
 end
 
 function __pwgen_is_include_numbers
