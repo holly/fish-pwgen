@@ -52,7 +52,7 @@ function pwgen
     set -l pwgen_strings (string join "" $__pwgen_lower_alphabets $__pwgen_upper_alphabets $__pwgen_numbers)
 
     if set -lq _flag_version
-        echo "pwgen, version 0.1"
+        echo "pwgen, version $__pwgen_version"
         return 0
     end
 
