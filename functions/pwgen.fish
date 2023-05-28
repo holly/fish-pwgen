@@ -1,4 +1,3 @@
-
 function __pwgen_help
 
     echo "fish-pwgen $__pwgen_version (https://github.com/holly/fish-pwgen/)
@@ -16,8 +15,8 @@ Options:
  -A        exclude uppercase alphabets
  -0        exclude numbers
  -y        include symbols
- -B        exclude similar words (1,I,l,q,9,0,O)
- 
+ -B        exclude similar words (0,1,2,9,l,q,z,I,O,Z)
+
 Example:
 
   # default. length:12 number:45.  password composed of alphabets and numbers
@@ -40,12 +39,13 @@ end
 
 function pwgen
 
-    # -c  include uppercase
     # -A  exclude uppercase
     # -n  include number
     # -0  exclude number
     # -y  include symbol
-    # -B  exclude 1,I,l,q,9,0,O
+    # -B  exclude similar words (0,1,2,9,l,q,z,I,O,Z)
+
+
     argparse -n pwgen "v/version" "h/help" "A" "0" "y" "B"  -- $argv
     or return 1
 
@@ -82,10 +82,27 @@ function pwgen
 
     set -l pwgen_length $__pwgen_length
     if test -n "$argv[1]"
+        if not __pwgen_is_number $argv[1]
+            set_color red; echo "length is not number."
+            return 1
+        end
+        if not __pwgen_is_valid_length $argv[1]
+            set_color red; echo "length is between $__pwgen_length_min and $__pwgen_length_max"
+            return 1
+        end
         set pwgen_length $argv[1]
     end
+
     set -l pwgen_number $__pwgen_number
     if test -n "$argv[2]"
+        if not __pwgen_is_number $argv[2]
+            set_color red; echo "number is not number."
+            return 1
+        end
+        if not __pwgen_is_valid_number $argv[2]
+            set_color red; echo "number is between $__pwgen_number_min and $__pwgen_number_max"
+            return 1
+        end
         set pwgen_number $argv[2]
     end
 
@@ -94,6 +111,11 @@ function pwgen
     while test (count $passwords) -ne $pwgen_number
 
         set -l password (env LC_ALL=C tr -dc "$pwgen_strings" </dev/urandom | fold -w $pwgen_length | head -n 1)
+
+        if test -z "$_flag_A"
+           and not __pwgen_is_include_alphabets $password
+            continue
+        end
 
         if test -z "$_flag_0"
            and not __pwgen_is_include_numbers $password
@@ -110,10 +132,50 @@ function pwgen
     printf "%s\n" $passwords | column -x
 end
 
+
+function __pwgen_is_number
+
+    set -l num $argv[1]
+    if string match -ra '^[0-9]+$' $num >/dev/null
+        return 0
+    end
+    return 1
+end
+
+function __pwgen_is_valid_length
+
+    set -l num $argv[1]
+    if test $num -ge $__pwgen_length_min
+       and test $num -le $__pwgen_length_max
+
+        return 0
+    end
+    return 1
+end
+
+function __pwgen_is_valid_number
+
+    set -l num $argv[1]
+    if test $num -ge $__pwgen_number_min
+       and test $num -le $__pwgen_number_max
+        return 0
+    end
+    return 1
+end
+
+function __pwgen_is_include_alphabets
+
+    set -l str $argv[1]
+    if string match -ra "[a-zA-Z]" $str >/dev/null
+        return 0
+    end
+    return 1
+end
+
 function __pwgen_is_include_numbers
 
     set -l str $argv[1]
-    if test (string match -ra "[0-9]" $str | wc -l) -gt 0
+    if string match -ra "[0-9]" $str >/dev/null
         return 0
     end
     return 1
@@ -122,7 +184,7 @@ end
 function __pwgen_is_include_syms
 
     set -l str $argv[1]
-    if test (string match -ra "[\.\+\*\^\$\@\%\_\<\>\{\}\#\!\/\|\;]" $str | wc -l) -gt 0
+    if string match -ra "[\.\+\*\^\$\@\%\_\<\>\{\}\#\!\/\|\;]" $str >/dev/null
         return 0
     end
     return 1
