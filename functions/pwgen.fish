@@ -15,8 +15,8 @@ Options:
  -A        exclude uppercase alphabets
  -0        exclude numbers
  -y        include symbols
- -B        exclude similar words (1,I,l,q,9,0,O)
- 
+ -B        exclude similar words (0,1,2,9,l,q,z,I,O,Z)
+
 Example:
 
   # default. length:12 number:45.  password composed of alphabets and numbers
@@ -43,7 +43,9 @@ function pwgen
     # -n  include number
     # -0  exclude number
     # -y  include symbol
-    # -B  exclude 1,I,l,q,9,0,O
+    # -B  exclude similar words (0,1,2,9,l,q,z,I,O,Z)
+
+
     argparse -n pwgen "v/version" "h/help" "A" "0" "y" "B"  -- $argv
     or return 1
 
