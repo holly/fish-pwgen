@@ -108,7 +108,7 @@ set -g __pwgen_anbiguous_strings "0129lqzIOZ"
 
 ## change length and numbers
 
-1 password of 12 characters is generated.
+1 password of 16 characters is generated.
 
 ```
 > pwgen 16 1
